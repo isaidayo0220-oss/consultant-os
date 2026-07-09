@@ -9,7 +9,15 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = createClient();
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+
+    if (error) {
+      // 失敗理由を/loginに渡して、画面上で確認できるようにする
+      // (よくある原因: リンクをリクエストしたブラウザと開いたブラウザが違う)
+      return NextResponse.redirect(
+        `${origin}/login?error=${encodeURIComponent(error.message)}`
+      );
+    }
   }
 
   return NextResponse.redirect(`${origin}/`);

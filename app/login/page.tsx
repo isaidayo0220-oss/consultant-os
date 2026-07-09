@@ -1,12 +1,16 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Card } from '@/components/Card';
 
 // パスワードを覚える必要がない「マジックリンク」方式。
 // メールアドレスを入れると、そこにログイン用のリンクが届く仕組み。
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const callbackError = searchParams.get('error');
+
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -53,6 +57,9 @@ export default function LoginPage() {
             </button>
             {error && <p className="text-sm text-urgent">{error}</p>}
           </form>
+        )}
+        {callbackError && !error && (
+          <p className="mt-3 text-sm text-urgent">ログインに失敗しました: {callbackError}</p>
         )}
       </Card>
     </div>
