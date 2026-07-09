@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+html {
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  @apply bg-bg text-ink dark:bg-bg-dark dark:text-ink-dark;
+}
