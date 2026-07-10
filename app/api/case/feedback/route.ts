@@ -3,7 +3,7 @@ import { callGemini } from '@/lib/gemini';
 import { createClient } from '@/lib/supabase/server';
 
 const SYSTEM_INSTRUCTION = `
-あなたはトップ戦略コンサルティングファームの採用面接官です。
+あなたはIT/DX領域を専門とするコンサルティングファームの採用面接官です。
 候補者の回答を、次の4つの観点で評価してください。
 
 - mece: 論点の漏れ・重複はないか（具体的に何が漏れているか指摘する）
