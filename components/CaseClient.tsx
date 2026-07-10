@@ -24,6 +24,18 @@ export function CaseClient({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  async function deleteSession(id: string) {
+    if (!confirm('この記録を削除しますか？元に戻せません。')) return;
+    try {
+      const res = await fetch(`/api/case/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error((await res.json()).error);
+      setHistory((h) => h.filter((s) => s.id !== id));
+      if (current?.id === id) setCurrent(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : '削除に失敗しました');
+    }
+  }
+
   async function generate() {
     setLoading(true);
     setError(null);
@@ -132,11 +144,20 @@ export function CaseClient({
               <li key={h.id}>
                 <Card className="flex items-center justify-between text-sm">
                   <span className="line-clamp-1">{h.problem}</span>
-                  {h.feedback && (
-                    <span className="shrink-0 font-mono text-xs text-ink-dim dark:text-ink-dark-dim">
-                      {h.feedback.score}/10
-                    </span>
-                  )}
+                  <div className="flex shrink-0 items-center gap-3">
+                    {h.feedback && (
+                      <span className="font-mono text-xs text-ink-dim dark:text-ink-dark-dim">
+                        {h.feedback.score}/10
+                      </span>
+                    )}
+                    <button
+                      onClick={() => deleteSession(h.id)}
+                      aria-label="削除"
+                      className="text-xs text-ink-dim transition hover:text-urgent dark:text-ink-dark-dim"
+                    >
+                      削除
+                    </button>
+                  </div>
                 </Card>
               </li>
             ))}
